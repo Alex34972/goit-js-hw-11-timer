@@ -1,20 +1,19 @@
 const body = document.querySelector(`body`);
 class CountdownTimer {
-  constructor({ onTick, targetDate, selector }) {
-    this.onTick = onTick;
+  constructor({ onCounter, targetDate }) {
+    this.onCounter = onCounter;
     this.targetDate = targetDate;
   }
-
   start() {
-    const targetDay = this.targetDate.getTime();
+    const endTime = this.targetDate.getTime();
     const startTime = Date.now();
-    const differenceTime = targetDay - startTime;
+    const differenceTime = endTime - startTime;
     setInterval(() => {
       const currentTime = Date.now();
       const deltaTime = currentTime - startTime;
       const leftTime = differenceTime - deltaTime;
       const time = this.getTimeComponents(leftTime);
-      this.onTick(time);
+      this.onCounter(time);
     }, 1000);
   }
   getTimeComponents(time) {
@@ -56,12 +55,8 @@ function upDateClockFace({ days, hours, mins, secs }) {
   body.innerHTML = marcup;
 }
 const timer = new CountdownTimer({
-  onTick: upDateClockFace,
+  onCounter: upDateClockFace,
   targetDate: new Date("Jun 10, 2021"),
   selector: "#timer-1",
 });
 timer.start();
-//new CountdownTimer({
-// selector: "#timer-1",
-// targetDate: new Date("Jul 17, 2019"),
-//});
