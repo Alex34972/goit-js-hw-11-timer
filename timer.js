@@ -1,24 +1,26 @@
-const body = document.querySelector(`body`);
 class CountdownTimer {
   constructor({ targetDate, selector }) {
     this.targetDate = targetDate;
-    this.selector = selector;
+    this.timerEl = document.querySelector(`${selector}`);
     this.start();
   }
+
   start() {
     const endTime = this.targetDate.getTime();
     const startTime = Date.now();
     const differenceTime = endTime - startTime;
+
     const timerId = setInterval(() => {
       const currentTime = Date.now();
       const deltaTime = currentTime - startTime;
       const leftTime = differenceTime - deltaTime;
-      const time = this.getTimeComponents(leftTime);
-      this.upDateClockFace(time);
+      if (leftTime !== 0) {
+        const time = this.getTimeComponents(leftTime);
+        this.upDateClockFace(time);
+      } else {
+        clearInterval(timerId);
+      }
     }, 1000);
-    if (leftTime === 0) {
-      clearTimeout(timerId);
-    }
   }
 
   getTimeComponents(time) {
@@ -34,7 +36,7 @@ class CountdownTimer {
     return String(value).padStart(2, `0`);
   }
   upDateClockFace({ days, hours, mins, secs }) {
-    const marcup = `<div class="timer" id="timer-1">
+    const marcup = `
   <div class="field">
     <span class="value" data-value="days">${days}</span>
     <span class="label">Days</span>
@@ -54,8 +56,9 @@ class CountdownTimer {
     <span class="value" data-value="secs">${secs}</span>
     <span class="label">Seconds</span>
   </div>
-</div>`;
-    body.innerHTML = marcup;
+`;
+
+    this.timerEl.innerHTML = marcup;
   }
 }
 
@@ -63,3 +66,8 @@ const timer = new CountdownTimer({
   targetDate: new Date("May 27, 2021"),
   selector: "#timer-1",
 });
+
+//const timer2 = new CountdownTimer({
+//  targetDate: new Date("May 27, 2022"),
+//  selector: "#timer-2",
+//});
