@@ -1,21 +1,26 @@
 const body = document.querySelector(`body`);
 class CountdownTimer {
-  constructor({ onCounter, targetDate }) {
-    this.onCounter = onCounter;
+  constructor({ targetDate, selector }) {
     this.targetDate = targetDate;
+    this.selector = selector;
+    this.start();
   }
   start() {
     const endTime = this.targetDate.getTime();
     const startTime = Date.now();
     const differenceTime = endTime - startTime;
-    setInterval(() => {
+    const timerId = setInterval(() => {
       const currentTime = Date.now();
       const deltaTime = currentTime - startTime;
       const leftTime = differenceTime - deltaTime;
       const time = this.getTimeComponents(leftTime);
-      this.onCounter(time);
+      this.upDateClockFace(time);
     }, 1000);
+    if (leftTime === 0) {
+      clearTimeout(timerId);
+    }
   }
+
   getTimeComponents(time) {
     const days = this.pad(Math.floor(time / (1000 * 60 * 60 * 24)));
     const hours = this.pad(
@@ -28,10 +33,8 @@ class CountdownTimer {
   pad(value) {
     return String(value).padStart(2, `0`);
   }
-}
-
-function upDateClockFace({ days, hours, mins, secs }) {
-  const marcup = `<div class="timer" id="timer-1">
+  upDateClockFace({ days, hours, mins, secs }) {
+    const marcup = `<div class="timer" id="timer-1">
   <div class="field">
     <span class="value" data-value="days">${days}</span>
     <span class="label">Days</span>
@@ -52,11 +55,11 @@ function upDateClockFace({ days, hours, mins, secs }) {
     <span class="label">Seconds</span>
   </div>
 </div>`;
-  body.innerHTML = marcup;
+    body.innerHTML = marcup;
+  }
 }
+
 const timer = new CountdownTimer({
-  onCounter: upDateClockFace,
-  targetDate: new Date("Jun 10, 2021"),
+  targetDate: new Date("May 27, 2021"),
   selector: "#timer-1",
 });
-timer.start();
