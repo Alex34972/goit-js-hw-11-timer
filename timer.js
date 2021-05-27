@@ -1,11 +1,11 @@
 class CountdownTimer {
   constructor({ targetDate, selector }) {
     this.targetDate = targetDate;
-    this.unit();
+    this.onUnitBuilding();
     this.elements = this.getElements(selector);
     this.start();
   }
-  unit() {
+  onUnitBuilding() {
     const body = document.querySelector("body");
     const marcup = `<div class="timer" id="timer-1">
   <div class="field">
